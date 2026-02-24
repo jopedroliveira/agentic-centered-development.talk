@@ -1,0 +1,423 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/*
+  Palette:
+  Blue (primary)   #045CFC  → links, progress bar, section subtitle
+  Yellow (accent)  #F9FF47  → h3, inline code, ordered list rings
+  Pink             #F29EFE  → blockquote border, ul bullets, strong, italic
+  Periwinkle       #A3A9FF  → table headers, cover subtitle, secondary text
+  Wine             #4A2930  → section glow warmth
+  Light            #F4F4F4  → h1, h2
+  Dark             #1C1C1C  → base
+*/
+
+:root {
+  --c-blue: #045CFC;
+  --c-yellow: #F9FF47;
+  --c-pink: #F29EFE;
+  --c-periwinkle: #A3A9FF;
+  --c-wine: #4A2930;
+  --c-light: #F4F4F4;
+  --c-dark: #1C1C1C;
+
+  --slidev-theme-primary: var(--c-blue);
+  --slidev-theme-accent: var(--c-yellow);
+  --slidev-theme-bg: #0e0e0e;
+  --slidev-theme-surface: #161616;
+  --slidev-theme-surface-light: #1e1e1e;
+  --slidev-theme-border: #2a2a2a;
+  --slidev-theme-text: #c8c8c8;
+  --slidev-theme-text-muted: #666666;
+}
+
+/* Force dark mode */
+html.dark, html:not(.dark) {
+  color-scheme: dark;
+}
+
+/* ── Base slide ── */
+
+.slidev-page {
+  background: var(--slidev-theme-bg) !important;
+  color: var(--slidev-theme-text) !important;
+  font-family: 'Google Sans Flex', sans-serif !important;
+}
+
+/* Noise grain */
+.slidev-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  background-size: 200px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle dot grid */
+.slidev-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(163, 169, 255, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slidev-layout {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Typography ── */
+
+.slidev-layout h1 {
+  font-family: 'Google Sans Flex', sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--c-light) !important;
+  line-height: 1.15 !important;
+}
+
+.slidev-layout h2 {
+  font-family: 'Google Sans Flex', sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--c-light) !important;
+}
+
+.slidev-layout h3 {
+  font-family: 'Google Sans Flex', sans-serif !important;
+  font-weight: 500 !important;
+  color: var(--c-yellow) !important;
+  letter-spacing: -0.01em !important;
+}
+
+.slidev-layout p,
+.slidev-layout li {
+  font-family: 'Google Sans Flex', sans-serif !important;
+  font-weight: 400;
+  color: var(--slidev-theme-text) !important;
+  line-height: 1.7 !important;
+}
+
+.slidev-layout strong {
+  color: var(--c-pink) !important;
+  font-weight: 600;
+}
+
+/* ── Section divider slides ── */
+
+.slidev-layout.section {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(4, 92, 252, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 40%, rgba(242, 158, 254, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(74, 41, 48, 0.08) 0%, transparent 50%) !important;
+}
+
+.slidev-layout.section h1 {
+  font-size: 4.5rem !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--c-light) !important;
+}
+
+.slidev-layout.section h1 + p {
+  color: var(--c-yellow) !important;
+  font-size: 1.1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+/* ── Cover slide ── */
+
+.slidev-layout.cover h1 {
+  font-size: 4rem !important;
+  font-weight: 500 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--c-light) !important;
+}
+
+.slidev-layout.cover h1 + p {
+  font-size: 1.15rem !important;
+  color: var(--c-yellow) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* ── Code blocks ── */
+
+.slidev-layout pre,
+.slidev-layout .shiki {
+  background: var(--slidev-theme-surface) !important;
+  border: 1px solid var(--slidev-theme-border) !important;
+  border-radius: 10px !important;
+  padding: 1.2em !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.82em !important;
+  line-height: 1.65 !important;
+  box-shadow:
+    0 0 40px rgba(4, 92, 252, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+
+.slidev-layout code:not(pre code) {
+  background: var(--slidev-theme-surface-light) !important;
+  border: 1px solid var(--slidev-theme-border) !important;
+  color: var(--c-yellow) !important;
+  border-radius: 5px !important;
+  padding: 0.15em 0.45em !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.85em !important;
+  font-weight: 500;
+}
+
+/* ── Tables ── */
+
+.slidev-layout table {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--slidev-theme-border) !important;
+}
+
+.slidev-layout thead {
+  background: var(--slidev-theme-surface) !important;
+}
+
+.slidev-layout thead th {
+  color: var(--c-periwinkle) !important;
+  font-weight: 500 !important;
+  font-size: 0.8em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  padding: 0.8em 1em !important;
+  border-bottom: 1px solid var(--slidev-theme-border) !important;
+  background: transparent !important;
+}
+
+.slidev-layout tbody td {
+  padding: 0.65em 1em !important;
+  border-bottom: 1px solid rgba(42, 42, 42, 0.6) !important;
+  color: var(--slidev-theme-text) !important;
+  font-size: 0.9em !important;
+  background: transparent !important;
+}
+
+.slidev-layout tbody tr {
+  background: transparent !important;
+  transition: background 0.2s ease;
+}
+
+.slidev-layout tbody tr:hover {
+  background: var(--slidev-theme-surface) !important;
+}
+
+.slidev-layout tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* ── Blockquotes ── */
+
+.slidev-layout blockquote {
+  background: var(--slidev-theme-surface) !important;
+  border-left: 2px solid var(--c-pink) !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 1.2em 1.5em !important;
+  margin: 1em 0 !important;
+  color: var(--slidev-theme-text) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+}
+
+.slidev-layout blockquote p {
+  color: var(--slidev-theme-text) !important;
+  font-size: 1.05em !important;
+}
+
+/* ── Lists ── */
+
+.slidev-layout ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+}
+
+.slidev-layout ul li {
+  position: relative;
+  padding-left: 1.4em !important;
+  margin-bottom: 0.5em;
+}
+
+.slidev-layout ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-pink);
+}
+
+/* Nested lists */
+.slidev-layout ul ul li::before {
+  width: 4px;
+  height: 4px;
+  background: var(--c-periwinkle);
+  opacity: 0.5;
+}
+
+.slidev-layout ol {
+  padding-left: 0 !important;
+  counter-reset: item;
+  list-style: none !important;
+}
+
+.slidev-layout ol > li {
+  counter-increment: item;
+  position: relative;
+  padding-left: 2.2em !important;
+  margin-bottom: 0.6em;
+}
+
+.slidev-layout ol > li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  border: 1.5px solid var(--c-yellow);
+  color: var(--c-yellow);
+  font-weight: 500;
+  font-size: 0.72em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Click animations ── */
+
+.slidev-vclick-target {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.slidev-vclick-hidden {
+  opacity: 0 !important;
+  transform: translateY(6px) !important;
+}
+
+.slidev-vclick-current {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ── Callout boxes ── */
+
+.slidev-layout .rounded {
+  border-radius: 10px !important;
+}
+
+.slidev-layout .bg-blue-500\/10 {
+  background: rgba(4, 92, 252, 0.06) !important;
+  border: 1px solid rgba(4, 92, 252, 0.15) !important;
+}
+
+.slidev-layout .bg-green-500\/10 {
+  background: rgba(249, 255, 71, 0.05) !important;
+  border: 1px solid rgba(249, 255, 71, 0.15) !important;
+}
+
+/* ── Two-cols layout ── */
+
+.slidev-layout.two-cols-header .col-left,
+.slidev-layout.two-cols-header .col-right,
+.two-cols .col-left,
+.two-cols .col-right {
+  padding: 0 0.8em;
+}
+
+/* ── Scrollbar ── */
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--slidev-theme-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slidev-theme-border);
+  border-radius: 4px;
+}
+
+/* ── Links ── */
+
+.slidev-layout a {
+  color: var(--c-blue) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(4, 92, 252, 0.25) !important;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.slidev-layout a:hover {
+  border-bottom-color: var(--c-blue) !important;
+}
+
+/* ── Center layout ── */
+
+.slidev-layout.center h1 {
+  font-size: 3.5rem !important;
+  font-weight: 500 !important;
+}
+
+/* ── Slide number ── */
+
+.slidev-nav .slidev-nav-page-number {
+  font-family: 'JetBrains Mono', monospace !important;
+  color: var(--slidev-theme-text-muted) !important;
+}
+
+/* ── Progress bar ── */
+
+.slidev-progress {
+  background: linear-gradient(90deg, var(--c-blue), var(--c-pink)) !important;
+}
+
+/* ── Fenced code title ── */
+
+.slidev-layout .shiki-container .code-title {
+  background: var(--slidev-theme-surface-light) !important;
+  color: var(--slidev-theme-text-muted) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  border-bottom: 1px solid var(--slidev-theme-border) !important;
+}
+
+/* ── Code inside fenced blocks ── */
+
+.slidev-layout pre code {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* ── hr separators ── */
+
+.slidev-layout hr {
+  border-color: var(--slidev-theme-border) !important;
+  opacity: 0.4;
+}
+
+/* ── Emphasis / italic ── */
+
+.slidev-layout em {
+  color: var(--c-pink) !important;
+  font-style: italic;
+}

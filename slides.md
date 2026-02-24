@@ -888,7 +888,7 @@ Questions?
 </div>
 
 <div class="mt-6 flex items-center justify-center gap-4 text-sm opacity-60">
-  <span>Pedro Oliveira</span>
+  <span>J. Pedro Oliveira</span>
   <a href="https://github.com/jopedroliveira" target="_blank" class="inline-flex items-center gap-1.5 !no-underline !border-b-0 opacity-80 hover:opacity-100"><carbon-logo-github class="text-base" /> jopedroliveira</a>
   <a href="https://jpoliveira.pt" target="_blank" class="inline-flex items-center gap-1.5 !no-underline !border-b-0 opacity-80 hover:opacity-100"><carbon-globe class="text-base" /> jpoliveira.pt</a>
 </div>

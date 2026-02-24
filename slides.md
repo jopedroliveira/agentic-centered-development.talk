@@ -57,6 +57,8 @@ Founder & Co-organizer of **Coimbra.js**
 
 <!--
 Intro rápida. Engenheiro biomédico que virou developer — prova de que não precisas de um curso de informática para estar nesta indústria.
+
+Para contexto: sou entusiasta de automação residencial e uso Home Assistant em casa. Escrevi uma app React inteira para melhorar a experiência para utilizadores não-técnicos e que não conhecem o Home Assistant — basicamente uma interface mais amigável para a família. É por isso que vou usar este projeto como exemplo ao longo da talk — é um caso real, não inventado.
 -->
 
 ---
@@ -84,6 +86,8 @@ Quem aqui já teve código gerado por AI que não seguia as convenções do proj
 
 <!--
 Da mesma forma que preparas documentação e processos para um dev novo, fazes o mesmo para o agente.
+
+A partir daqui vou usar como exemplo um projeto real: a minha app de Home Assistant. É uma app React/Next.js que controla dispositivos de casa — luzes, sensores, climatização. O objetivo era dar uma interface simples à família, sem precisarem de saber o que é o Home Assistant. Vamos ver como estruturei o projeto para que o Claude fosse produtivo desde o primeiro momento.
 -->
 
 ---

@@ -3,3 +3,4 @@ dist/
 .claude/
 .playwright-mcp/
 *.png
+.DS_Store

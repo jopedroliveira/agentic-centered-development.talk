@@ -16,8 +16,10 @@ highlighter: shiki
 
 A Guide to Agentic Centered Development
 
-<div class="abs-br m-6">
+<div class="abs-br m-6 flex items-center gap-3">
   <span class="text-sm opacity-50">J. Pedro Oliveira</span>
+  <span class="opacity-30">|</span>
+  <img src="/assets/subvisual-white.svg" class="h-5 opacity-50" alt="Subvisual" />
 </div>
 
 <div class="abs-bl m-6">
@@ -881,10 +883,15 @@ Questions?
   <a href="https://github.com/VoltAgent/awesome-agent-skills" target="_blank" class="inline-block px-4 py-2 text-sm font-mono rounded-lg border border-[#F9FF47]/15 text-[#F9FF47]/70 bg-[#F9FF47]/5 hover:bg-[#F9FF47]/10 transition-colors !no-underline !border-b-0">Awesome Skills</a>
 </div>
 
-<div class="mt-8 flex items-center justify-center gap-6 text-sm opacity-60">
-  <span class="font-semibold">Subvisual</span>
+<div class="mt-6 flex items-center justify-center gap-4 text-sm opacity-60">
+  <span>Pedro Oliveira</span>
   <a href="https://github.com/jopedroliveira" target="_blank" class="inline-flex items-center gap-1.5 !no-underline !border-b-0 opacity-80 hover:opacity-100"><carbon-logo-github class="text-base" /> jopedroliveira</a>
-  <a href="https://coimbrajs.dev" target="_blank" class="inline-flex items-center gap-1.5 !no-underline !border-b-0 opacity-80 hover:opacity-100"><carbon-globe class="text-base" /> coimbrajs.dev</a>
+  <a href="https://jpoliveira.pt" target="_blank" class="inline-flex items-center gap-1.5 !no-underline !border-b-0 opacity-80 hover:opacity-100"><carbon-globe class="text-base" /> jpoliveira.pt</a>
+</div>
+
+<div class="mt-4 flex items-center justify-center gap-10">
+  <img src="/assets/subvisual-white.svg" class="h-5 opacity-40" alt="Subvisual" />
+  <img src="/assets/coimbrajs.svg" class="h-7 opacity-40" alt="Coimbra.js" />
 </div>
 
 <!--

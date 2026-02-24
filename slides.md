@@ -45,9 +45,9 @@ transition: fade-out
   <a href="https://jpoliveira.pt" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-full border border-[#A3A9FF]/20 text-[#A3A9FF]/70 bg-[#A3A9FF]/5 !no-underline !border-b-[border-[#A3A9FF]/20]"><carbon-globe class="text-sm" /> jpoliveira.pt</a>
 </div>
 
-Fullstack Web Developer / Technical Manager @ **Subvisual**
+Fullstack Web Developer @ **Subvisual**
 
-Founder & Co-organizer of **Coimbra.js**
+Co-organizer of **Coimbra.js**
 
 <br>
 
@@ -56,9 +56,7 @@ Founder & Co-organizer of **Coimbra.js**
 - Biomedical Engineering background — yes, not everyone studied CS
 
 <!--
-Intro rápida. Engenheiro biomédico que virou developer — prova de que não precisas de um curso de informática para estar nesta indústria.
-
-Para contexto: sou entusiasta de automação residencial e uso Home Assistant em casa. Escrevi uma app React inteira para melhorar a experiência para utilizadores não-técnicos e que não conhecem o Home Assistant — basicamente uma interface mais amigável para a família. É por isso que vou usar este projeto como exemplo ao longo da talk — é um caso real, não inventado.
+Intro rápida. Fullstack web developer na subvisual, e uma das pessoas que organiza o meetup
 -->
 
 ---
@@ -84,8 +82,16 @@ Quem aqui já teve código gerado por AI que não seguia as convenções do proj
 
 > Instead of just asking AI to generate code, you **structure your project so the agent is productive from the very first moment** — just like you'd onboard a new developer.
 
+<br>
+
+<div class="text-sm opacity-60">
+  Examples use <strong class="text-[#F29EFE]">Claude Code</strong> — but the principles apply to <strong>Cursor</strong>, <strong>Windsurf</strong>, <strong>GitHub Copilot</strong>, and others.
+</div>
+
 <!--
 Da mesma forma que preparas documentação e processos para um dev novo, fazes o mesmo para o agente.
+
+Nesta talk vou usar o Claude Code como exemplo, mas os princípios são transferíveis. O Cursor tem .cursorrules e slash commands, o Windsurf tem .windsurfrules e workflows, o GitHub Copilot tem copilot-instructions.md e AGENTS.md, o Cline tem .clinerules. MCP é suportado por quase todos. A diferença é que o Claude Code formaliza todos estes conceitos — context files, skills, commands, subagents, hooks, plugins — como features de primeira classe.
 
 A partir daqui vou usar como exemplo um projeto real: a minha app de Home Assistant. É uma app React/Next.js que controla dispositivos de casa — luzes, sensores, climatização. O objetivo era dar uma interface simples à família, sem precisarem de saber o que é o Home Assistant. Vamos ver como estruturei o projeto para que o Claude fosse produtivo desde o primeiro momento.
 -->
@@ -102,10 +108,11 @@ layout: two-cols-header
 |---|---|
 | **CLAUDE.md** | Onboarding doc |
 | **Skills** | Specialized documentation |
-| **Commands** | Makefile scripts |
+| **Commands** | npm scripts |
 | **Subagents** | Specialist colleagues |
 | **Hooks** | CI/CD |
 | **Plugins** | npm packages |
+| **MCP** | DevTools extensions |
 
 ::right::
 
@@ -118,6 +125,7 @@ Commands    → You (/command)
 Subagents   → The model delegates
 Hooks       → Automatic (events)
 Plugins     → Manual installation
+MCP         → Configured (settings)
 ```
 
 <!--
@@ -481,7 +489,9 @@ Summarize this PR focusing on:
 The `!` commands execute **BEFORE** sending to Claude. Claude only sees the result.
 
 <!--
-Os comandos com ! executam antes de enviar ao Claude. Ele só vê o output. Isto permite injetar contexto dinâmico como diffs de PRs.
+Os comandos com ! executam antes de enviar ao Claude. Ele só vê o output. Isto é fundamental porque significa que o contexto é sempre fresh — não é uma cópia estática que pode ficar desatualizada. Cada vez que invocas o /pr-summary, ele vai buscar o diff e os comentários naquele momento.
+
+Outro detalhe importante: o ! corre na shell do utilizador, com as permissões e environment variables do utilizador. Ou seja, podes usar qualquer CLI que tenhas instalado — gh, jq, curl, docker, kubectl — para injetar contexto de qualquer fonte. Não estás limitado ao que o Claude consegue aceder diretamente.
 -->
 
 ---
@@ -496,7 +506,7 @@ Os comandos com ! executam antes de enviar ao Claude. Ele só vê o output. Isto
 | **Arguments** | Yes (`$ARGUMENTS`) | No |
 
 <!--
-Resumo: commands são para ti invocares, skills são para o modelo decidir. Commands aceitam argumentos, skills não.
+Resumo: commands são para invocares, skills são para o modelo decidir. Commands aceitam argumentos, skills não.
 -->
 
 ---
@@ -783,6 +793,38 @@ Um plugin é um bundle de skills, commands, agents e hooks num repo git. Instala
 -->
 
 ---
+
+# MCP — External Superpowers
+
+MCP (Model Context Protocol) servers extend the agent with **external tools and data sources**.
+
+<br>
+
+<v-clicks>
+
+| Server | What it does |
+|---|---|
+| **Playwright** | Browse, test & screenshot web pages |
+| **Figma** | Read designs, tokens & components |
+| **GitHub** | Manage repos, PRs, issues |
+| **Postgres / Supabase** | Query & design database schemas |
+
+</v-clicks>
+
+<br>
+
+> Think of MCP as **DevTools extensions for your agent** — install once, always available.
+
+<!--
+MCP é o protocolo que permite ao agente ligar-se a ferramentas externas. 
+O Playwright permite navegar e testar páginas web — usámos isto para construir esta apresentação. 
+O Figma MCP é oficial e dá ao agente contexto de design direto dos ficheiros Figma. 
+O GitHub MCP permite gerir repos, PRs e issues. E há servidores para bases de dados como Postgres e Supabase.
+
+Pensem no MCP como extensões de DevTools para o agente — da mesma forma que instalas o React DevTools ou o Redux DevTools no browser para ter superpoderes de debugging, instalas MCP servers para dar superpoderes ao agente. Há um registry oficial em modelcontextprotocol.io com centenas de servidores.
+-->
+
+---
 layout: section
 ---
 
@@ -862,8 +904,10 @@ Agentic Centered Development
 │   └── Isolated context · Different model per cost
 ├── Hooks — The CI/CD
 │   └── Deterministic (not a suggestion)
-└── Plugins — Sharing
-    └── Bundle everything in a git repo
+├── Plugins — Sharing
+│   └── Bundle everything in a git repo
+└── MCP — External Superpowers
+    └── DevTools extensions for the agent
 ```
 
 <!--

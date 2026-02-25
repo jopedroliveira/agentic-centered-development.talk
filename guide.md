@@ -1,118 +1,119 @@
-# Agentic Centered Development — Guia Completo
+# Agentic Centered Development — Complete Guide
 
-> Guia de referência para a talk e para aprendizagem pessoal.
-> Cobre CLAUDE.md / AGENTS.md, Skills, Commands (Slash Commands), Subagents, Hooks, e Plugins.
+> Reference guide for the talk and personal learning.
+> Covers CLAUDE.md / AGENTS.md, Skills, Commands (Slash Commands), Subagents, Hooks, and Plugins.
 
 ---
 
-## 1. O Conceito Central
+## 1. The Core Concept
 
-**Agentic Centered Development** é a ideia de que, em vez de apenas pedires ao AI para gerar código, **estruturas o teu projeto para que o agente seja produtivo desde o primeiro momento** — tal como farias onboarding a um developer novo.
+**Agentic Centered Development** is the idea that, instead of just asking AI to generate code, you **structure your project so the agent is productive from the very first moment** — just like you'd onboard a new developer.
 
-Os building blocks são:
+The building blocks are:
 
-| Building Block | O que faz | Quem invoca | Onde vive |
+| Building Block | What it does | Who invokes | Where it lives |
 |---|---|---|---|
-| **CLAUDE.md** | Contexto persistente do projeto | Automático (sempre carregado) | Raiz do repo, subdirs, `~/.claude/` |
-| **Skills** | Expertise on-demand (carregado quando relevante) | O modelo decide sozinho | `.claude/skills/`, `~/.claude/skills/` |
-| **Slash Commands** | Prompts reutilizáveis com trigger explícito | O utilizador (`/command`) | `.claude/commands/`, `~/.claude/commands/` |
-| **Subagents** | Agentes especializados com contexto isolado | O modelo delega ou tu pedes | `.claude/agents/`, `~/.claude/agents/` |
-| **Hooks** | Ações determinísticas (shell scripts) em lifecycle events | Automático em eventos | Settings JSON |
-| **Plugins** | Bundle de skills + commands + agents + hooks | Instalação via marketplace | Git repos públicos |
+| **CLAUDE.md** | Persistent project context | Automatic (always loaded) | Repo root, subdirs, `~/.claude/` |
+| **Skills** | On-demand expertise (loaded when relevant) | The model decides on its own | `.claude/skills/`, `~/.claude/skills/` |
+| **Slash Commands** | Reusable prompts with explicit trigger | The user (`/command`) | `.claude/commands/`, `~/.claude/commands/` |
+| **Subagents** | Specialized agents with isolated context | The model delegates or you ask | `.claude/agents/`, `~/.claude/agents/` |
+| **Hooks** | Deterministic actions (shell scripts) on lifecycle events | Automatic on events | Settings JSON |
+| **Plugins** | Bundle of skills + commands + agents + hooks | Installation via marketplace | Public git repos |
+| **MCP** | External tools and data via Model Context Protocol | Configured (settings) | Settings JSON |
 
-A analogia chave: **CLAUDE.md é o onboarding doc, Skills são a documentação especializada, Commands são os scripts do Makefile, Subagents são os colegas especialistas, e Hooks são o CI/CD.**
+The key analogy: **CLAUDE.md is the onboarding doc, Skills are the specialized documentation, Commands are the npm scripts, Subagents are the specialist colleagues, Hooks are the CI/CD, Plugins are npm packages, and MCP are DevTools extensions.**
 
 ---
 
-## 2. CLAUDE.md (e AGENTS.md)
+## 2. CLAUDE.md (and AGENTS.md)
 
-### O que é
+### What is it
 
-Um ficheiro markdown que o Claude lê automaticamente no início de cada conversa. É o "README para agentes" — dá contexto que o agente não consegue inferir só do código.
+A markdown file that Claude reads automatically at the start of every conversation. It's the "README for agents" — it provides context that the agent can't infer from code alone.
 
 ### CLAUDE.md vs AGENTS.md
 
-- **CLAUDE.md** — formato nativo do Claude Code (Anthropic)
-- **AGENTS.md** — formato aberto, cross-tool (suportado por Codex, Cursor, Gemini CLI, Jules, etc.), mantido pela Agentic AI Foundation sob a Linux Foundation
-- Na prática, o conteúdo é o mesmo. Podes ter ambos.
+- **CLAUDE.md** — native format for Claude Code (Anthropic)
+- **AGENTS.md** — open format, cross-tool (supported by Codex, Cursor, Gemini CLI, Jules, etc.), maintained by the Agentic AI Foundation under the Linux Foundation
+- In practice, the content is the same. You can have both.
 
-### Hierarquia (cascata)
+### Hierarchy (Cascade)
 
 ```
-~/.claude/CLAUDE.md          ← Global (preferências pessoais)
-  └── /projeto/CLAUDE.md     ← Projeto (root do repo)
-      └── /projeto/src/CLAUDE.md   ← Subdiretório (contexto local)
-          └── /projeto/tests/CLAUDE.md  ← Outro subdir
+~/.claude/CLAUDE.md          ← Global (personal preferences)
+  └── /project/CLAUDE.md     ← Project (repo root)
+      └── /project/src/CLAUDE.md   ← Subdirectory (local context)
+          └── /project/tests/CLAUDE.md  ← Another subdir
 ```
 
-O Claude carrega todos os que encontrar na hierarquia. O mais próximo do diretório de trabalho tem precedência.
+Claude loads all of them found in the hierarchy. The closest one to the working directory takes precedence.
 
-### O que incluir (WHY → WHAT → HOW)
+### What to include (WHY → WHAT → HOW)
 
 ```markdown
 # Home Control App
 
-## Projeto
-App React/Next.js para controlo de dispositivos Home Assistant.
-Usa TypeScript strict, Tailwind CSS, e shadcn/ui.
+## Project
+React/Next.js app for Home Assistant device control.
+Uses TypeScript strict, Tailwind CSS, and shadcn/ui.
 
-## Comandos
+## Commands
 - `npm run dev` — Dev server (port 3000)
-- `npm run build` — Build de produção
+- `npm run build` — Production build
 - `npm run test` — Vitest
 - `npm run lint` — ESLint + Prettier
 
-## Arquitetura
+## Architecture
 - `/app` — Next.js App Router
-- `/components/ui` — Componentes reutilizáveis (shadcn)
-- `/components/devices` — Componentes por tipo de device
-- `/lib/ha` — Client Home Assistant WebSocket API
+- `/components/ui` — Reusable components (shadcn)
+- `/components/devices` — Components by device type
+- `/lib/ha` — Home Assistant WebSocket API client
 - `/hooks` — Custom hooks (useDevice, useAutomation, etc.)
 
-## Convenções
-- Named exports, nunca default exports
-- Um componente por ficheiro
-- Hooks custom prefixados com `use`
-- Device types em `/types/devices.ts`
-- Novos devices: criar componente + hook + tipo
+## Conventions
+- Named exports, never default exports
+- One component per file
+- Custom hooks prefixed with `use`
+- Device types in `/types/devices.ts`
+- New devices: create component + hook + type
 
-## Cuidado
-- O WebSocket do HA pode desligar — sempre handle reconnection
-- Nunca guardar tokens no client-side localStorage
-- As entidades do HA usam `entity_id` no formato `domain.name`
+## Watch out
+- HA WebSocket can disconnect — always handle reconnection
+- Never store tokens in client-side localStorage
+- HA entities use `entity_id` in the format `domain.name`
 ```
 
 ### Best Practices
 
-1. **Menos é mais** — Modelos atendem ~150-200 instruções. Se tudo é IMPORTANT, nada é.
-2. **Não repitas o que o Claude já sabe** — Não precisas explicar como funciona React.
-3. **Progressive disclosure** — Em vez de meter tudo no CLAUDE.md, diz-lhe onde encontrar info: "Para convenções de API, ver `/docs/api-conventions.md`".
-4. **Refactora regularmente** — Remove instruções que o Claude já segue naturalmente.
-5. **Não é um linter** — Para regras rígidas, usa hooks ou linters reais.
+1. **Less is more** — Models follow ~150-200 instructions. If everything is IMPORTANT, nothing is.
+2. **Don't repeat what Claude already knows** — You don't need to explain how React works.
+3. **Progressive disclosure** — Instead of putting everything in CLAUDE.md, say where to find info: "For API conventions, see `/docs/api-conventions.md`".
+4. **Refactor regularly** — Remove instructions that Claude already follows naturally.
+5. **It's not a linter** — For strict rules, use hooks or real linters.
 
 ---
 
 ## 3. Skills (Agent Skills)
 
-### O que são
+### What are they
 
-Skills são **expertise modular on-demand**. Ao contrário do CLAUDE.md (que é sempre carregado), uma Skill só é lida quando o Claude decide que é relevante para a tarefa. É como o "I know Kung Fu" do Neo no Matrix — carrega o conhecimento just-in-time.
+Skills are **modular on-demand expertise**. Unlike CLAUDE.md (which is always loaded), a Skill is only read when Claude decides it's relevant for the task. It's like Neo's "I know Kung Fu" in The Matrix — it loads knowledge just-in-time.
 
-### Como funciona (Progressive Disclosure)
+### How it works (Progressive Disclosure)
 
-1. **Arranque**: O Claude lê apenas o `name` e `description` de todas as skills disponíveis (metadata no system prompt)
-2. **Match**: Quando recebes um pedido, o Claude avalia se alguma skill é relevante baseado na descrição
-3. **Load**: Se sim, lê o `SKILL.md` completo para o contexto
-4. **Execute**: Usa as instruções para completar a tarefa
+1. **Startup**: Claude reads only the `name` and `description` of all available skills (metadata in the system prompt)
+2. **Match**: When you make a request, Claude evaluates if any skill is relevant based on the description
+3. **Load**: If yes, reads the full `SKILL.md` into context
+4. **Execute**: Uses the instructions to complete the task
 
-Isto é eficiente porque **só o que é preciso entra no context window**.
+This is efficient because **only what's needed enters the context window**.
 
-### Estrutura de uma Skill
+### Structure of a Skill
 
 ```
 .claude/skills/
   └── add-device/
-      ├── SKILL.md           ← Obrigatório (instruções + metadata)
+      ├── SKILL.md           ← Required (instructions + metadata)
       ├── templates/
       │   ├── DeviceComponent.tsx.template
       │   └── useDevice.ts.template
@@ -120,7 +121,7 @@ Isto é eficiente porque **só o que é preciso entra no context window**.
           └── scaffold.sh
 ```
 
-### SKILL.md — Anatomia
+### SKILL.md — Anatomy
 
 ```markdown
 ---
@@ -133,33 +134,33 @@ description: >
 
 # Add New Device Support
 
-## Quando usar
-Quando precisas de adicionar suporte para um novo tipo de device
-do Home Assistant à aplicação.
+## When to use
+When you need to add support for a new Home Assistant device type
+to the application.
 
-## Passos
+## Steps
 
-1. Criar o tipo em `/types/devices.ts`:
-   - Extender a interface `BaseDevice`
-   - Incluir os atributos específicos do domínio HA
+1. Create the type in `/types/devices.ts`:
+   - Extend the `BaseDevice` interface
+   - Include HA domain-specific attributes
 
-2. Criar o hook em `/hooks/`:
-   - Naming: `use{DeviceType}.ts` (ex: `useLight.ts`)
-   - Deve usar o `useHAWebSocket` base
-   - Incluir actions específicas (toggle, setBrightness, etc.)
+2. Create the hook in `/hooks/`:
+   - Naming: `use{DeviceType}.ts` (e.g.: `useLight.ts`)
+   - Must use the base `useHAWebSocket`
+   - Include specific actions (toggle, setBrightness, etc.)
 
-3. Criar o componente em `/components/devices/`:
-   - Naming: `{DeviceType}Card.tsx` (ex: `LightCard.tsx`)
-   - Usar shadcn/ui components
+3. Create the component in `/components/devices/`:
+   - Naming: `{DeviceType}Card.tsx` (e.g.: `LightCard.tsx`)
+   - Use shadcn/ui components
    - Responsive: mobile-first
 
-4. Registar no device registry `/lib/ha/deviceRegistry.ts`
+4. Register in the device registry `/lib/ha/deviceRegistry.ts`
 
-5. Adicionar testes em `/tests/devices/`
+5. Add tests in `/tests/devices/`
 
-## Exemplo: Light Device
+## Example: Light Device
 
-### Tipo (`/types/devices.ts`)
+### Type (`/types/devices.ts`)
 ```typescript
 export interface LightDevice extends BaseDevice {
   domain: 'light';
@@ -174,32 +175,32 @@ export interface LightDevice extends BaseDevice {
 ```typescript
 export function useLight(entityId: string) {
   const { state, callService } = useHAEntity(entityId);
-  
+
   return {
     ...state,
     toggle: () => callService('light', 'toggle', { entity_id: entityId }),
-    setBrightness: (value: number) => 
+    setBrightness: (value: number) =>
       callService('light', 'turn_on', { entity_id: entityId, brightness: value }),
   };
 }
 ```
 ```
 
-### Tipos de Skills por localização
+### Skill types by location
 
-| Localização | Scope | Partilhável |
+| Location | Scope | Shareable |
 |---|---|---|
-| `~/.claude/skills/` | Pessoal (todos os projetos) | Não |
-| `.claude/skills/` | Projeto (via git) | Sim, com a equipa |
-| Plugin marketplace | Comunidade | Sim, publicamente |
+| `~/.claude/skills/` | Personal (all projects) | No |
+| `.claude/skills/` | Project (via git) | Yes, with the team |
+| Plugin marketplace | Community | Yes, publicly |
 
-### Frontmatter avançado
+### Advanced frontmatter
 
 ```yaml
 ---
 name: safe-analyzer
 description: Analyze code without making changes
-allowed-tools: Read, Grep, Glob    # Restringe as ferramentas disponíveis
+allowed-tools: Read, Grep, Glob    # Restricts available tools
 ---
 ```
 
@@ -207,31 +208,31 @@ allowed-tools: Read, Grep, Glob    # Restringe as ferramentas disponíveis
 ---
 name: deploy-check
 description: Pre-deployment validation
-disable-model-invocation: true     # Só invocável via /deploy-check
+disable-model-invocation: true     # Only invocable via /deploy-check
 ---
 ```
 
-### Skill vs CLAUDE.md — Quando usar qual?
+### Skill vs CLAUDE.md — When to use which?
 
-| Situação | Usar |
+| Situation | Use |
 |---|---|
-| Contexto que é SEMPRE relevante | CLAUDE.md |
-| Expertise para tarefas específicas | Skill |
-| Info que ocupa muito espaço no context | Skill |
-| Workflows reutilizáveis com templates | Skill |
-| Comandos de build/test/lint | CLAUDE.md |
+| Context that is ALWAYS relevant | CLAUDE.md |
+| Expertise for specific tasks | Skill |
+| Info that takes up too much context space | Skill |
+| Reusable workflows with templates | Skill |
+| Build/test/lint commands | CLAUDE.md |
 
 ---
 
 ## 4. Slash Commands
 
-### O que são
+### What are they
 
-Prompts reutilizáveis que tu invocas explicitamente com `/nome`. São atalhos para workflows que fazes frequentemente.
+Reusable prompts that you invoke explicitly with `/name`. They're shortcuts for workflows you do frequently.
 
-> **Nota**: Desde Claude Code 1.0, commands e skills foram "merged". Um ficheiro em `.claude/commands/review.md` e um em `.claude/skills/review/SKILL.md` criam ambos o `/review`. Commands existentes continuam a funcionar.
+> **Note**: Since Claude Code 1.0, commands and skills have been "merged". A file at `.claude/commands/review.md` and one at `.claude/skills/review/SKILL.md` both create `/review`. Existing commands continue to work.
 
-### Estrutura
+### Structure
 
 ```
 .claude/commands/
@@ -240,7 +241,7 @@ Prompts reutilizáveis que tu invocas explicitamente com `/nome`. São atalhos p
   └── deploy-check.md
 ```
 
-### Exemplo: `/add-device`
+### Example: `/add-device`
 
 ```markdown
 Scaffold a new Home Assistant device component.
@@ -258,11 +259,11 @@ Follow these steps:
 Use the existing LightCard.tsx and useLight.ts as reference implementations.
 ```
 
-**Uso**: `/add-device thermostat`
+**Usage**: `/add-device thermostat`
 
-O `$ARGUMENTS` é substituído por tudo o que escreveres depois do comando.
+`$ARGUMENTS` is replaced by everything you type after the command.
 
-### Exemplo: `/review`
+### Example: `/review`
 
 ```markdown
 Review the current changes for code quality.
@@ -278,9 +279,9 @@ Review the current changes for code quality.
 4. Rate severity: 🔴 must fix, 🟡 should fix, 🟢 nice to have
 ```
 
-### Dynamic Context com `!command`
+### Dynamic Context with `!command`
 
-Commands podem executar shell commands e injetar o output:
+Commands can execute shell commands and inject the output:
 
 ```markdown
 ---
@@ -301,43 +302,43 @@ Summarize this PR focusing on:
 3. Testing recommendations
 ```
 
-Os comandos `!` executam ANTES de enviar ao Claude. O Claude só vê o resultado.
+The `!` commands execute BEFORE sending to Claude. Claude only sees the result.
 
-### Commands vs Skills — Diferença-chave
+### Commands vs Skills — Key difference
 
 | | Commands (Slash) | Skills |
 |---|---|---|
-| **Quem invoca** | Tu (`/command`) | O modelo (automático) |
-| **Quando** | Explicitamente | Quando o modelo acha relevante |
-| **Para quê** | Workflows repetitivos, atalhos | Expertise especializada |
-| **Argumentos** | Sim (`$ARGUMENTS`) | Não |
+| **Who invokes** | You (`/command`) | The model (automatic) |
+| **When** | Explicitly | When the model deems it relevant |
+| **Purpose** | Repetitive workflows, shortcuts | Specialized expertise |
+| **Arguments** | Yes (`$ARGUMENTS`) | No |
 
 ---
 
 ## 5. Subagents
 
-### O que são
+### What are they
 
-Agentes especializados com o seu **próprio context window**, system prompt, e ferramentas. Quando o Claude encontra uma tarefa que match a descrição de um subagent, delega-lhe o trabalho.
+Specialized agents with their **own context window**, system prompt, and tools. When Claude encounters a task that matches a subagent's description, it delegates the work.
 
-### Porquê usar
+### Why use them
 
-1. **Preservar contexto** — A exploração e output do subagent não poluem a tua conversa principal
-2. **Especialização** — System prompts focados dão melhores resultados
-3. **Controlo** — Podes limitar as ferramentas que cada agente tem
-4. **Custo** — Podes rotear para modelos mais baratos (Haiku) para tarefas simples
+1. **Preserve context** — The subagent's exploration and output don't pollute your main conversation
+2. **Specialization** — Focused system prompts yield better results
+3. **Control** — You can limit the tools each agent has access to
+4. **Cost** — You can route to cheaper models (Haiku) for simple tasks
 
 ### Built-in subagents
 
-| Agente | O que faz | Ferramentas |
+| Agent | What it does | Tools |
 |---|---|---|
-| **Explore** | Pesquisa e análise read-only do codebase | Read, Grep, Glob |
-| **Plan** | Planeamento sem alterar ficheiros | Read, Grep, Glob |
-| **general-purpose** | Tarefas genéricas | Todas |
+| **Explore** | Read-only codebase research and analysis | Read, Grep, Glob |
+| **Plan** | Planning without modifying files | Read, Grep, Glob |
+| **general-purpose** | Generic tasks | All |
 
-### Criar um subagent custom
+### Creating a custom subagent
 
-Ficheiro: `.claude/agents/ha-expert.md`
+File: `.claude/agents/ha-expert.md`
 
 ```markdown
 ---
@@ -373,41 +374,41 @@ a React/Next.js application.
 - Not throttling rapid state updates from HA
 ```
 
-### Gestão de subagents
+### Managing subagents
 
 ```bash
-/agents           # Ver todos os subagents, criar novos
-/agents create    # Wizard interativo
+/agents           # View all subagents, create new ones
+/agents create    # Interactive wizard
 ```
 
 ### Subagent vs Skill
 
 | | Subagent | Skill |
 |---|---|---|
-| **Context** | Isolado (próprio context window) | Partilhado (mesmo context) |
-| **Execução** | Trabalha independentemente, retorna resultado | Instruções injetadas na conversa |
-| **Modelo** | Pode usar modelo diferente | Usa o modelo da conversa |
-| **Ideal para** | Tarefas longas, exploratórias | Expertise pontual, templates |
+| **Context** | Isolated (own context window) | Shared (same context) |
+| **Execution** | Works independently, returns result | Instructions injected into conversation |
+| **Model** | Can use a different model | Uses the conversation's model |
+| **Ideal for** | Long, exploratory tasks | Punctual expertise, templates |
 
 ---
 
 ## 6. Hooks
 
-### O que são
+### What are they
 
-Shell scripts que executam automaticamente em eventos do lifecycle do Claude Code. São **determinísticos** — ao contrário do CLAUDE.md que são sugestões, hooks são regras que se cumprem sempre.
+Shell scripts that run automatically on Claude Code lifecycle events. They are **deterministic** — unlike CLAUDE.md which are suggestions, hooks are rules that are always enforced.
 
-### Eventos disponíveis
+### Available events
 
-| Evento | Quando |
+| Event | When |
 |---|---|
-| `PreToolUse` | Antes de qualquer ferramenta (Read, Write, Bash, etc.) |
-| `PostToolUse` | Depois de uma ferramenta executar |
-| `Stop` | Quando o agente principal termina |
-| `SubagentStop` | Quando um subagente termina |
-| `Notification` | Quando uma notificação é enviada |
+| `PreToolUse` | Before any tool runs (Read, Write, Bash, etc.) |
+| `PostToolUse` | After a tool executes |
+| `Stop` | When the main agent finishes |
+| `SubagentStop` | When a subagent finishes |
+| `Notification` | When a notification is sent |
 
-### Exemplo prático: Bloquear commits sem testes
+### Practical example: Block commits without tests
 
 ```json
 {
@@ -424,21 +425,21 @@ Shell scripts que executam automaticamente em eventos do lifecycle do Claude Cod
 
 ### Hooks vs CLAUDE.md
 
-- **CLAUDE.md**: "Corre os testes antes de fazer commit" (sugestão — pode ser ignorada)
-- **Hook**: Bloqueia literalmente o commit se os testes não passaram (determinístico)
+- **CLAUDE.md**: "Run tests before committing" (suggestion — can be ignored)
+- **Hook**: Literally blocks the commit if tests haven't passed (deterministic)
 
 ---
 
 ## 7. Plugins
 
-### O que são
+### What are they
 
-Bundles de skills + commands + agents + hooks num repositório git partilhável. São como packages npm mas para agentes.
+Bundles of skills + commands + agents + hooks in a shareable git repository. They're like npm packages but for agents.
 
-### Estrutura
+### Structure
 
 ```
-meu-plugin/
+my-plugin/
 ├── plugin.json          # Metadata
 ├── skills/
 │   └── add-device/
@@ -453,40 +454,63 @@ meu-plugin/
 
 ### Marketplaces
 
-Repositórios git públicos que listam plugins. A Anthropic tem um marketplace oficial, e tu podes criar o teu.
+Public git repositories that list plugins. Anthropic has an official marketplace, and you can create your own.
 
 ```bash
-/plugins install <url>    # Instalar um plugin
-/plugins                  # Gerir plugins instalados
+/plugins install <url>    # Install a plugin
+/plugins                  # Manage installed plugins
 ```
 
 ---
 
-## 8. Juntando Tudo — Exemplo: Home Control App
+## 8. MCP (Model Context Protocol)
 
-Aqui está como ficaria o projeto completo com todos os building blocks:
+### What is it
+
+MCP servers extend the agent with **external tools and data sources**. Think of MCP as **DevTools extensions for the agent** — just like you install React DevTools in the browser, you install MCP servers to give the agent superpowers.
+
+### MCP server examples
+
+| Server | What it does |
+|---|---|
+| **Playwright** | Browse, test and screenshot web pages |
+| **Figma** | Read designs, tokens and components |
+| **GitHub** | Manage repos, PRs, issues |
+| **Postgres / Supabase** | Query and design database schemas |
+
+There's an official registry at [modelcontextprotocol.io](https://modelcontextprotocol.io) with hundreds of available servers.
+
+### Configuration
+
+MCP servers are configured in `settings.json` (global or local to the project). Once configured, they're always available to the agent.
+
+---
+
+## 9. Putting It All Together — Example: Home Control App
+
+Here's what the complete project would look like with all building blocks:
 
 ```
 home-control-app/
-├── CLAUDE.md                           ← Contexto global do projeto
+├── CLAUDE.md                           ← Global project context
 ├── .claude/
 │   ├── skills/
 │   │   ├── add-device/
-│   │   │   ├── SKILL.md                ← Como adicionar novo device
+│   │   │   ├── SKILL.md                ← How to add a new device
 │   │   │   └── templates/
 │   │   │       ├── DeviceCard.tsx.tmpl
 │   │   │       └── useDevice.ts.tmpl
 │   │   ├── ha-websocket/
-│   │   │   └── SKILL.md                ← Expertise WebSocket HA
+│   │   │   └── SKILL.md                ← HA WebSocket expertise
 │   │   └── component-patterns/
-│   │       └── SKILL.md                ← Padrões de componentes React
+│   │       └── SKILL.md                ← React component patterns
 │   ├── commands/
-│   │   ├── add-device.md               ← /add-device <tipo>
+│   │   ├── add-device.md               ← /add-device <type>
 │   │   ├── review.md                   ← /review
 │   │   └── deploy-check.md            ← /deploy-check
 │   └── agents/
-│       ├── ha-expert.md                ← Especialista Home Assistant
-│       └── accessibility-reviewer.md   ← Review de a11y
+│       ├── ha-expert.md                ← Home Assistant specialist
+│       └── accessibility-reviewer.md   ← a11y review
 ├── app/
 ├── components/
 ├── hooks/
@@ -495,79 +519,85 @@ home-control-app/
 └── tests/
 ```
 
-### Flow de trabalho real
+### Real workflow
 
 ```
-Tu: /add-device climate
+You: /add-device climate
 
-Claude: [Lê o command add-device.md]
-        [Deteta que a skill "add-device" é relevante → carrega SKILL.md]
-        [Segue os passos, usa templates]
-        [Delega validação HA ao subagent ha-expert]
-        [Cria ficheiros, corre lint e testes]
-        [Hook bloqueia commit se testes falharem]
+Claude: [Reads the command add-device.md]
+        [Detects that the "add-device" skill is relevant → loads SKILL.md]
+        [Follows the steps, uses templates]
+        [Delegates HA validation to the subagent ha-expert]
+        [Creates files, runs lint and tests]
+        [Hook blocks commit if tests fail]
 
-Resultado: ClimateCard.tsx, useClimate.ts, tipos, testes — tudo consistente
+Result: ClimateCard.tsx, useClimate.ts, types, tests — all consistent
 ```
 
 ---
 
-## 9. Mapa Mental para a Talk
+## 10. Mental Map for the Talk
 
 ```
 Agentic Centered Development
 │
-├── 🧠 O Problema
-│   ├── "Gerei código com AI e saiu inconsistente"
-│   ├── O agente não conhece as tuas convenções
-│   └── Repetir contexto em cada sessão
+├── 🧠 The Problem
+│   ├── "I generated code with AI and it came out inconsistent"
+│   ├── The agent doesn't know your conventions
+│   └── Repeating context every session
 │
-├── 📋 CLAUDE.md — O Onboarding
-│   ├── WHY: O que é o projeto
-│   ├── WHAT: Arquitetura e estrutura
-│   ├── HOW: Comandos, convenções, gotchas
+├── 📋 CLAUDE.md — The Onboarding
+│   ├── WHY: What the project is
+│   ├── WHAT: Architecture and structure
+│   ├── HOW: Commands, conventions, gotchas
 │   └── Less is more + progressive disclosure
 │
-├── 🎯 Skills — Expertise On-Demand
-│   ├── Model-invoked (automático)
-│   ├── Progressive disclosure (só carrega quando precisa)
-│   ├── Templates + scripts de suporte
-│   └── Demo: skill "add-device" com templates
+├── 🎯 Skills — On-Demand Expertise
+│   ├── Model-invoked (automatic)
+│   ├── Progressive disclosure (only loads when needed)
+│   ├── Templates + supporting scripts
+│   └── Demo: "add-device" skill with templates
 │
-├── ⚡ Commands — Os Atalhos
+├── ⚡ Commands — The Shortcuts
 │   ├── User-invoked (/command)
-│   ├── $ARGUMENTS para parametrização
-│   ├── !`shell` para contexto dinâmico
+│   ├── $ARGUMENTS for parameterization
+│   ├── !`shell` for dynamic context
 │   └── Demo: /add-device thermostat
 │
-├── 🤖 Subagents — A Equipa
-│   ├── Context window isolado
-│   ├── Especialização (HA expert, a11y reviewer)
-│   ├── Modelo diferente por custo
-│   └── Demo: delegação automática ao ha-expert
+├── 🤖 Subagents — The Team
+│   ├── Isolated context window
+│   ├── Specialization (HA expert, a11y reviewer)
+│   ├── Different model per cost
+│   └── Demo: automatic delegation to ha-expert
 │
-├── 🔒 Hooks — O CI/CD
-│   ├── Determinístico (não é sugestão)
+├── 🔒 Hooks — The CI/CD
+│   ├── Deterministic (not a suggestion)
 │   ├── Block commits, validate, notify
-│   └── Complemento ao CLAUDE.md
+│   └── Complement to CLAUDE.md
 │
-└── 📦 Plugins — Partilha
-    ├── Bundle tudo num repo git
-    ├── Marketplace para a comunidade
-    └── Ex: "home-assistant-react-toolkit"
+├── 📦 Plugins — Sharing
+│   ├── Bundle everything in a git repo
+│   ├── Marketplace for the community
+│   └── E.g.: "home-assistant-react-toolkit"
+│
+└── 🔌 MCP — External Superpowers
+    ├── DevTools extensions for the agent
+    ├── Playwright, Figma, GitHub, Postgres
+    └── Official registry at modelcontextprotocol.io
 ```
 
 ---
 
-## 10. Recursos e Referências
+## 11. Resources and References
 
-- **Docs oficiais Skills**: https://code.claude.com/docs/en/skills
-- **Docs oficiais Subagents**: https://code.claude.com/docs/en/sub-agents
-- **Blog Anthropic — Agent Skills**: https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills
-- **AGENTS.md (formato aberto)**: https://agents.md/
+- **Official Skills Docs**: https://code.claude.com/docs/en/skills
+- **Official Subagents Docs**: https://code.claude.com/docs/en/sub-agents
+- **Anthropic Blog — Agent Skills**: https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills
+- **AGENTS.md (open format)**: https://agents.md/
 - **Awesome Agent Skills**: https://github.com/VoltAgent/awesome-agent-skills
 - **Awesome Subagents**: https://github.com/VoltAgent/awesome-claude-code-subagents
 - **Best Practices Claude Code**: https://code.claude.com/docs/en/best-practices
 - **Deep dive Skills architecture**: https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/
+- **MCP Registry**: https://modelcontextprotocol.io
 - **CLAUDE.md guide (Builder.io)**: https://www.builder.io/blog/claude-md-guide
 - **Writing good CLAUDE.md (HumanLayer)**: https://www.humanlayer.dev/blog/writing-a-good-claude-md

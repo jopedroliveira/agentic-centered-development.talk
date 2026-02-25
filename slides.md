@@ -29,7 +29,7 @@ A Guide to Agentic Centered Development
 </div>
 
 <!--
-Vamos falar sobre como parar de tratar agentes de AI como autocomplete glorificado e começar a tratá-los como membros da equipa.
+Let's talk about how to stop treating AI agents as glorified autocomplete and start treating them as team members.
 -->
 
 ---
@@ -56,7 +56,7 @@ Co-organizer of **Coimbra.js**
 - Biomedical Engineering background — yes, not everyone studied CS
 
 <!--
-Intro rápida. Fullstack web developer na subvisual, e uma das pessoas que organiza o meetup
+Quick intro. Fullstack web developer at Subvisual, and one of the people who organizes the meetup.
 -->
 
 ---
@@ -73,7 +73,7 @@ Intro rápida. Fullstack web developer na subvisual, e uma das pessoas que organ
 </v-clicks>
 
 <!--
-Quem aqui já teve código gerado por AI que não seguia as convenções do projeto? O problema não é o modelo — é a falta de contexto.
+Who here has had AI-generated code that didn't follow the project's conventions? The problem isn't the model — it's the lack of context.
 -->
 
 ---
@@ -89,11 +89,11 @@ Quem aqui já teve código gerado por AI que não seguia as convenções do proj
 </div>
 
 <!--
-Da mesma forma que preparas documentação e processos para um dev novo, fazes o mesmo para o agente.
+Just like you prepare documentation and processes for a new developer, you do the same for the agent.
 
-Nesta talk vou usar o Claude Code como exemplo, mas os princípios são transferíveis. O Cursor tem .cursorrules e slash commands, o Windsurf tem .windsurfrules e workflows, o GitHub Copilot tem copilot-instructions.md e AGENTS.md, o Cline tem .clinerules. MCP é suportado por quase todos. A diferença é que o Claude Code formaliza todos estes conceitos — context files, skills, commands, subagents, hooks, plugins — como features de primeira classe.
+In this talk I'll use Claude Code as an example, but the principles are transferable. Cursor has .cursorrules and slash commands, Windsurf has .windsurfrules and workflows, GitHub Copilot has copilot-instructions.md and AGENTS.md, Cline has .clinerules. MCP is supported by almost all of them. The difference is that Claude Code formalizes all these concepts — context files, skills, commands, subagents, hooks, plugins — as first-class features.
 
-A partir daqui vou usar como exemplo um projeto real: a minha app de Home Assistant. É uma app React/Next.js que controla dispositivos de casa — luzes, sensores, climatização. O objetivo era dar uma interface simples à família, sem precisarem de saber o que é o Home Assistant. Vamos ver como estruturei o projeto para que o Claude fosse produtivo desde o primeiro momento.
+From here on I'll use a real project as an example: my Home Assistant app. It's a React/Next.js app that controls home devices — lights, sensors, climate. The goal was to give a simple interface to the family, without needing to know what Home Assistant is. Let's see how I structured the project so that Claude was productive from the very first moment.
 -->
 
 ---
@@ -129,7 +129,7 @@ MCP         → Configured (settings)
 ```
 
 <!--
-Cada building block tem um papel diferente. Vamos ver cada um em detalhe.
+Each building block has a different role. Let's look at each one in detail.
 -->
 
 ---
@@ -141,7 +141,7 @@ layout: section
 The Onboarding Doc
 
 <!--
-Vamos começar pelo mais importante: o CLAUDE.md. É o documento de onboarding do agente.
+Let's start with the most important one: CLAUDE.md. It's the agent's onboarding document.
 -->
 
 ---
@@ -161,7 +161,7 @@ It's the **"README for agents"** — it provides context that the agent can't in
 - In practice, the content is the same
 
 <!--
-O AGENTS.md é mantido pela Agentic AI Foundation sob a Linux Foundation. Podes ter ambos no projeto.
+AGENTS.md is maintained by the Agentic AI Foundation under the Linux Foundation. You can have both in the project.
 -->
 
 ---
@@ -178,7 +178,7 @@ Claude loads **all** of them found in the hierarchy. The closest one to the work
 ```
 
 <!--
-O Claude carrega todos os que encontrar na hierarquia. Funciona em cascata — o mais próximo do diretório de trabalho tem precedência.
+Claude loads all of them found in the hierarchy. It works as a cascade — the closest one to the working directory takes precedence.
 -->
 
 ---
@@ -205,7 +205,7 @@ Uses TypeScript strict, Tailwind CSS, shadcn/ui.
 ```
 
 <!--
-Isto é um exemplo real. Reparem na estrutura: WHY (o que é o projeto), WHAT (arquitetura), HOW (comandos e convenções). Continua no próximo slide.
+This is a real example. Notice the structure: WHY (what the project is), WHAT (architecture), HOW (commands and conventions). Continues on the next slide.
 -->
 
 ---
@@ -231,7 +231,7 @@ The remaining sections of a good CLAUDE.md:
 </div>
 
 <!--
-A secção "Watch out" é muitas vezes a mais valiosa. É conhecimento tribal — coisas que o agente não consegue inferir só a olhar para o código.
+The "Watch out" section is often the most valuable. It's tribal knowledge — things the agent can't infer just by looking at the code.
 -->
 
 ---
@@ -254,7 +254,7 @@ A secção "Watch out" é muitas vezes a mais valiosa. É conhecimento tribal �
 </v-clicks>
 
 <!--
-O ponto 1 é crucial. Um CLAUDE.md de 500 linhas vai ser parcialmente ignorado. Menos é mais.
+Point 1 is crucial. A 500-line CLAUDE.md will be partially ignored. Less is more.
 -->
 
 ---
@@ -266,7 +266,7 @@ layout: section
 On-Demand Expertise
 
 <!--
-Agora vamos falar de Skills — expertise modular on-demand.
+Now let's talk about Skills — modular on-demand expertise.
 -->
 
 ---
@@ -293,7 +293,7 @@ Only what's needed enters the context window.
 </div>
 
 <!--
-É como o "I know Kung Fu" do Neo no Matrix — carrega conhecimento just-in-time. Só o que é preciso entra no context window.
+It's like Neo's "I know Kung Fu" in The Matrix — it loads knowledge just-in-time. Only what's needed enters the context window.
 -->
 
 ---
@@ -324,7 +324,7 @@ description: >
 ```
 
 <!--
-Uma skill vive numa pasta com o SKILL.md obrigatório. Pode ter templates e scripts de suporte. O frontmatter define o nome e a descrição que o modelo vê no arranque.
+A skill lives in a folder with the required SKILL.md. It can have supporting templates and scripts. The frontmatter defines the name and description that the model sees at startup.
 -->
 
 ---
@@ -353,7 +353,7 @@ Uma skill vive numa pasta com o SKILL.md obrigatório. Pode ter templates e scri
 ```
 
 <!--
-Este é o conteúdo completo de um SKILL.md — passos claros e um exemplo concreto. O Claude segue isto quando carrega a skill.
+This is the full content of a SKILL.md — clear steps and a concrete example. Claude follows this when it loads the skill.
 -->
 
 ---
@@ -381,7 +381,7 @@ disable-model-invocation: true   # Only invocable via /deploy-check
 ```
 
 <!--
-Podes restringir ferramentas para skills read-only, ou desativar a invocação automática para que só funcione como slash command explícito.
+You can restrict tools for read-only skills, or disable automatic invocation so it only works as an explicit slash command.
 -->
 
 ---
@@ -397,7 +397,7 @@ Podes restringir ferramentas para skills read-only, ou desativar a invocação a
 | Build/test/lint commands | CLAUDE.md |
 
 <!--
-Regra simples: se é sempre relevante, CLAUDE.md. Se é expertise para tarefas específicas, Skill.
+Simple rule: if it's always relevant, CLAUDE.md. If it's expertise for specific tasks, Skill.
 -->
 
 ---
@@ -409,7 +409,7 @@ layout: section
 The Shortcuts
 
 <!--
-Agora os Slash Commands — os atalhos que tu invocas explicitamente.
+Now Slash Commands — the shortcuts you invoke explicitly.
 -->
 
 ---
@@ -430,7 +430,7 @@ Reusable prompts that you invoke with **`/name`**. They're shortcuts for frequen
 > Since Claude Code 1.0, commands and skills have been "merged". A file at `.claude/commands/review.md` and one at `.claude/skills/review/SKILL.md` both create `/review`.
 
 <!--
-Desde a versão 1.0 do Claude Code, commands e skills foram merged. Ambos criam o mesmo slash command.
+Since Claude Code version 1.0, commands and skills have been merged. Both create the same slash command.
 -->
 
 ---
@@ -458,7 +458,7 @@ Use the existing LightCard.tsx and useLight.ts as reference implementations.
 `$ARGUMENTS` is replaced by everything you type after the command.
 
 <!--
-O $ARGUMENTS é substituído por tudo o que escreveres depois do comando. Neste caso, "thermostat" seria o tipo de device.
+$ARGUMENTS is replaced by everything you type after the command. In this case, "thermostat" would be the device type.
 -->
 
 ---
@@ -489,9 +489,9 @@ Summarize this PR focusing on:
 The `!` commands execute **BEFORE** sending to Claude. Claude only sees the result.
 
 <!--
-Os comandos com ! executam antes de enviar ao Claude. Ele só vê o output. Isto é fundamental porque significa que o contexto é sempre fresh — não é uma cópia estática que pode ficar desatualizada. Cada vez que invocas o /pr-summary, ele vai buscar o diff e os comentários naquele momento.
+The ! commands execute before sending to Claude. He only sees the output. This is fundamental because it means the context is always fresh — it's not a static copy that can become outdated. Every time you invoke /pr-summary, it fetches the diff and comments at that moment.
 
-Outro detalhe importante: o ! corre na shell do utilizador, com as permissões e environment variables do utilizador. Ou seja, podes usar qualquer CLI que tenhas instalado — gh, jq, curl, docker, kubectl — para injetar contexto de qualquer fonte. Não estás limitado ao que o Claude consegue aceder diretamente.
+Another important detail: the ! runs in the user's shell, with the user's permissions and environment variables. This means you can use any CLI you have installed — gh, jq, curl, docker, kubectl — to inject context from any source. You're not limited to what Claude can access directly.
 -->
 
 ---
@@ -506,7 +506,7 @@ Outro detalhe importante: o ! corre na shell do utilizador, com as permissões e
 | **Arguments** | Yes (`$ARGUMENTS`) | No |
 
 <!--
-Resumo: commands são para invocares, skills são para o modelo decidir. Commands aceitam argumentos, skills não.
+Summary: commands are for you to invoke, skills are for the model to decide. Commands accept arguments, skills don't.
 -->
 
 ---
@@ -518,7 +518,7 @@ layout: section
 The Team
 
 <!--
-Subagents — a equipa de especialistas que o agente principal pode delegar trabalho.
+Subagents — the team of specialists that the main agent can delegate work to.
 -->
 
 ---
@@ -541,7 +541,7 @@ Specialized agents with their **own context window**, system prompt, and tools.
 </v-clicks>
 
 <!--
-Quatro razões principais: preservar contexto, especialização, controlo de ferramentas, e otimização de custos. Podes usar Haiku para tarefas simples e poupar tokens.
+Four main reasons: preserve context, specialization, tool control, and cost optimization. You can use Haiku for simple tasks and save tokens.
 -->
 
 ---
@@ -555,7 +555,7 @@ Quatro razões principais: preservar contexto, especialização, controlo de fer
 | **general-purpose** | Generic tasks | All |
 
 <!--
-O Claude Code já vem com estes subagents built-in. O Explore é read-only, o Plan só planeia, e o general-purpose tem acesso a tudo.
+Claude Code already comes with these built-in subagents. Explore is read-only, Plan only plans, and general-purpose has access to everything.
 -->
 
 ---
@@ -583,7 +583,7 @@ working within a React/Next.js application.
 ```
 
 <!--
-Aqui temos o frontmatter do subagent: nome, descrição, modelo (sonnet para poupar), ferramentas permitidas. Depois o system prompt com a expertise.
+Here we have the subagent frontmatter: name, description, model (sonnet to save costs), allowed tools. Then the system prompt with the expertise.
 -->
 
 ---
@@ -610,16 +610,16 @@ Subagent system prompts shine when they encode **domain-specific pitfalls** — 
 </div>
 
 <!--
-A secção de "Common pitfalls" é o que torna um subagent realmente útil vs. um modelo genérico.
+The "Common pitfalls" section is what makes a subagent truly useful vs. a generic model.
 
-Neste exemplo do Home Assistant:
-- "Not handling HA unavailability" — o servidor HA pode ir abaixo ou reiniciar. Se o agente gerar código que assume que o WebSocket está sempre ligado, vais ter crashes silenciosos em produção. O subagent sabe que deve sempre gerar lógica de reconnection com backoff.
-- "Missing unsubscribe on component unmount" — no React, se subscreveres a state updates do HA via WebSocket e não fizeres cleanup no useEffect return, tens memory leaks e state updates em componentes desmontados. O subagent sabe verificar isto automaticamente.
-- "Assuming entity attributes exist" — cada integração do HA pode ter atributos diferentes. Uma lâmpada Hue tem color_temp, mas uma lâmpada genérica pode não ter. O subagent sabe que deve sempre usar optional chaining e verificar a existência dos atributos.
+In this Home Assistant example:
+- "Not handling HA unavailability" — the HA server can go down or restart. If the agent generates code that assumes the WebSocket is always connected, you'll get silent crashes in production. The subagent knows it should always generate reconnection logic with backoff.
+- "Missing unsubscribe on component unmount" — in React, if you subscribe to HA state updates via WebSocket and don't clean up in the useEffect return, you get memory leaks and state updates on unmounted components. The subagent knows to check this automatically.
+- "Assuming entity attributes exist" — each HA integration can have different attributes. A Hue bulb has color_temp, but a generic bulb might not. The subagent knows it should always use optional chaining and check for attribute existence.
 
-O ponto-chave: estes pitfalls são conhecimento tribal que vem da experiência com a tecnologia. Um modelo genérico não saberia disto. Ao codificá-los no subagent, estás a dar-lhe anos de experiência em segundos.
+The key point: these pitfalls are tribal knowledge that comes from experience with the technology. A generic model wouldn't know this. By encoding them in the subagent, you're giving it years of experience in seconds.
 
-Isto aplica-se a qualquer domínio: Stripe (idempotency keys, webhook retries), AWS (IAM least privilege, eventual consistency), bases de dados (N+1 queries, missing indexes), etc.
+This applies to any domain: Stripe (idempotency keys, webhook retries), AWS (IAM least privilege, eventual consistency), databases (N+1 queries, missing indexes), etc.
 -->
 
 ---
@@ -634,7 +634,7 @@ Isto aplica-se a qualquer domínio: Stripe (idempotency keys, webhook retries), 
 | **Ideal for** | Long, exploratory tasks | Punctual expertise, templates |
 
 <!--
-Subagent: contexto isolado, trabalha independente, pode usar modelo diferente. Skill: partilha contexto, instruções injetadas na conversa. Usa subagent para tarefas longas, skill para expertise pontual.
+Subagent: isolated context, works independently, can use a different model. Skill: shares context, instructions injected into conversation. Use subagent for long tasks, skill for punctual expertise.
 -->
 
 ---
@@ -646,7 +646,7 @@ layout: section
 The CI/CD
 
 <!--
-Hooks — o CI/CD do agente. Tudo o que vimos até agora (CLAUDE.md, skills, commands) são "soft" — o modelo pode decidir não seguir. Os hooks são "hard" — são shell scripts que correm automaticamente e podem bloquear ações. É a diferença entre dizer "por favor corre os testes" e ter um CI que falha o build se os testes não passarem.
+Hooks — the agent's CI/CD. Everything we've seen so far (CLAUDE.md, skills, commands) is "soft" — the model can decide not to follow. Hooks are "hard" — they're shell scripts that run automatically and can block actions. It's the difference between saying "please run the tests" and having a CI that fails the build if tests don't pass.
 -->
 
 ---
@@ -668,18 +668,18 @@ Shell scripts that run automatically on **lifecycle events**. They are **determi
 | `Notification` | When a notification is sent |
 
 <!--
-Cinco eventos de lifecycle disponíveis.
+Five lifecycle events available.
 
-Onde vivem os hooks? No settings.json — que pode ser global (~/.claude/settings.json, as tuas preferências pessoais) ou local ao projeto (.claude/settings.json, partilhado com a equipa via git). A diferença é importante: hooks globais aplicam-se a todos os teus projetos (ex: nunca fazer force push), hooks locais são específicos do projeto (ex: correr o linter deste repo). Ao contrário do CLAUDE.md que também tem esta hierarquia, aqui estamos a falar de regras hard-coded, não sugestões.
+Where do hooks live? In settings.json — which can be global (~/.claude/settings.json, your personal preferences) or local to the project (.claude/settings.json, shared with the team via git). The distinction matters: global hooks apply to all your projects (e.g., never force push), local hooks are project-specific (e.g., run this repo's linter). Unlike CLAUDE.md which also has this hierarchy, here we're talking about hard-coded rules, not suggestions.
 
-- PreToolUse é o mais poderoso: corre ANTES de qualquer ferramenta. Se o script imprimir algo com "BLOCK:", a ação é cancelada. Podes usá-lo para impedir commits sem testes, bloquear escrita em ficheiros protegidos, ou validar que o linter passou.
-- PostToolUse corre depois — útil para logging, notificações (ex: Slack quando o agente faz deploy), ou para correr formatação automática depois de o agente escrever código.
-- Stop e SubagentStop correm no final — bons para cleanup, relatórios de sessão, ou garantir que não ficaram ficheiros temporários.
-- Notification — quando o agente envia uma notificação ao utilizador (ex: tarefa terminada), podes trigger ações externas.
+- PreToolUse is the most powerful: runs BEFORE any tool. If the script prints something with "BLOCK:", the action is cancelled. You can use it to prevent commits without tests, block writes to protected files, or validate that the linter passed.
+- PostToolUse runs after — useful for logging, notifications (e.g., Slack when the agent deploys), or running auto-formatting after the agent writes code.
+- Stop and SubagentStop run at the end — good for cleanup, session reports, or ensuring no temporary files were left behind.
+- Notification — when the agent sends a notification to the user (e.g., task finished), you can trigger external actions.
 
-O matcher aceita glob patterns: "Bash(git commit*)" apanha qualquer git commit, "Write(*.env)" apanha escrita em ficheiros .env. Podes ter vários hooks por evento.
+The matcher accepts glob patterns: "Bash(git commit*)" catches any git commit, "Write(*.env)" catches writes to .env files. You can have multiple hooks per event.
 
-Importante: hooks são determinísticos — não há AI envolvida. São shell scripts puros. Isto dá-te garantias que o CLAUDE.md não pode dar.
+Important: hooks are deterministic — no AI involved. They're pure shell scripts. This gives you guarantees that CLAUDE.md cannot provide.
 -->
 
 ---
@@ -707,17 +707,17 @@ Importante: hooks são determinísticos — não há AI envolvida. São shell sc
 | **Example** | "Run tests before committing" | Blocks the commit if tests failed |
 
 <!--
-Neste exemplo: o matcher "Bash(git commit*)" intercepta qualquer tentativa de commit. O command verifica se existe o ficheiro /tmp/tests-passed — se não existir, imprime "BLOCK:" e o commit é cancelado.
+In this example: the matcher "Bash(git commit*)" intercepts any commit attempt. The command checks if the file /tmp/tests-passed exists — if not, it prints "BLOCK:" and the commit is cancelled.
 
-Na prática, terias outro hook PostToolUse que cria esse ficheiro quando os testes passam. Assim garantes o fluxo: testes primeiro, commit depois.
+In practice, you'd have another PostToolUse hook that creates that file when tests pass. This ensures the flow: tests first, commit after.
 
-Outros exemplos úteis de hooks:
-- Bloquear escrita em .env ou ficheiros de credenciais: matcher "Write(*.env)", command que imprime BLOCK
-- Auto-formatar código depois de escrito: PostToolUse com matcher "Write(*.ts)", command "npx prettier --write $FILE"
-- Notificar no Slack quando uma tarefa termina: Stop hook que faz curl para um webhook
-- Impedir force push: PreToolUse com matcher "Bash(git push --force*)"
+Other useful hook examples:
+- Block writes to .env or credential files: matcher "Write(*.env)", command that prints BLOCK
+- Auto-format code after writing: PostToolUse with matcher "Write(*.ts)", command "npx prettier --write $FILE"
+- Notify Slack when a task finishes: Stop hook that curls a webhook
+- Prevent force push: PreToolUse with matcher "Bash(git push --force*)"
 
-A tabela resume a diferença fundamental: CLAUDE.md é uma sugestão ("por favor corre os testes"), o hook é uma regra que se cumpre sempre. Usa CLAUDE.md para guidelines, hooks para invariantes que nunca devem ser violados.
+The table summarizes the fundamental difference: CLAUDE.md is a suggestion ("please run the tests"), the hook is a rule that's always enforced. Use CLAUDE.md for guidelines, hooks for invariants that should never be violated.
 -->
 
 ---
@@ -744,11 +744,11 @@ A tabela resume a diferença fundamental: CLAUDE.md é uma sugestão ("por favor
 ```
 
 <!--
-Quatro exemplos práticos para além do commit blocking:
-- Proteger ficheiros sensíveis como .env de serem modificados pelo agente.
-- Auto-formatar código com Prettier sempre que o agente escreve um ficheiro TypeScript — assim não precisas de pedir ao agente para formatar.
-- Impedir force push — uma regra de segurança que queres garantir sempre.
-- O último é um hook Stop (sem matcher) — corre sempre que o agente termina. Neste caso notifica o Slack. Útil para quando lançaste uma tarefa longa e queres ser avisado.
+Four practical examples beyond commit blocking:
+- Protect sensitive files like .env from being modified by the agent.
+- Auto-format code with Prettier whenever the agent writes a TypeScript file — so you don't need to ask the agent to format.
+- Prevent force push — a security rule you always want to enforce.
+- The last one is a Stop hook (no matcher) — runs whenever the agent finishes. In this case it notifies Slack. Useful when you've launched a long task and want to be notified.
 -->
 
 ---
@@ -760,7 +760,7 @@ layout: section
 Sharing
 
 <!--
-Plugins — a forma de partilhar tudo o que vimos até agora num pacote reutilizável.
+Plugins — the way to share everything we've seen so far in a reusable package.
 -->
 
 ---
@@ -789,7 +789,7 @@ my-plugin/
 ```
 
 <!--
-Um plugin é um bundle de skills, commands, agents e hooks num repo git. Instala-se com um comando e está pronto a usar. A Anthropic tem um marketplace oficial.
+A plugin is a bundle of skills, commands, agents and hooks in a git repo. Install with a command and it's ready to use. Anthropic has an official marketplace.
 -->
 
 ---
@@ -816,12 +816,12 @@ MCP (Model Context Protocol) servers extend the agent with **external tools and 
 > Think of MCP as **DevTools extensions for your agent** — install once, always available.
 
 <!--
-MCP é o protocolo que permite ao agente ligar-se a ferramentas externas. 
-O Playwright permite navegar e testar páginas web — usámos isto para construir esta apresentação. 
-O Figma MCP é oficial e dá ao agente contexto de design direto dos ficheiros Figma. 
-O GitHub MCP permite gerir repos, PRs e issues. E há servidores para bases de dados como Postgres e Supabase.
+MCP is the protocol that lets the agent connect to external tools.
+Playwright lets you browse and test web pages — we used this to build this presentation.
+The Figma MCP is official and gives the agent design context directly from Figma files.
+The GitHub MCP lets you manage repos, PRs and issues. And there are servers for databases like Postgres and Supabase.
 
-Pensem no MCP como extensões de DevTools para o agente — da mesma forma que instalas o React DevTools ou o Redux DevTools no browser para ter superpoderes de debugging, instalas MCP servers para dar superpoderes ao agente. Há um registry oficial em modelcontextprotocol.io com centenas de servidores.
+Think of MCP as DevTools extensions for the agent — just like you install React DevTools or Redux DevTools in the browser for debugging superpowers, you install MCP servers to give the agent superpowers. There's an official registry at modelcontextprotocol.io with hundreds of servers.
 -->
 
 ---
@@ -831,7 +831,7 @@ layout: section
 # Putting It All Together
 
 <!--
-Agora vamos juntar tudo e ver como ficaria um projeto completo.
+Now let's put it all together and see what a complete project would look like.
 -->
 
 ---
@@ -857,7 +857,7 @@ home-control-app/
 ```
 
 <!--
-Aqui está a estrutura completa. CLAUDE.md na raiz, skills com templates, commands para atalhos, e agents especializados. Tudo versionado no git com a equipa.
+Here's the complete structure. CLAUDE.md at the root, skills with templates, commands for shortcuts, and specialized agents. Everything versioned in git with the team.
 -->
 
 ---
@@ -884,7 +884,7 @@ You: /add-device climate
 </div>
 
 <!--
-Este é o flow real. Um único comando dispara o command, que ativa a skill, que usa templates, delega ao subagent, e o hook garante qualidade. Tudo automático e consistente.
+This is the real flow. A single command triggers the command, which activates the skill, which uses templates, delegates to the subagent, and the hook ensures quality. All automatic and consistent.
 -->
 
 ---
@@ -911,7 +911,7 @@ Agentic Centered Development
 ```
 
 <!--
-Mapa mental de resumo. Cada building block tem o seu papel. A ideia central é: estrutura o teu projeto para que o agente seja produtivo desde o primeiro momento.
+Summary mental map. Each building block has its role. The core idea: structure your project so that the agent is productive from the very first moment.
 -->
 
 ---
@@ -943,5 +943,5 @@ Questions?
 </div>
 
 <!--
-Obrigado! Perguntas?
+Thank you! Questions?
 -->
